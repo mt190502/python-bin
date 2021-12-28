@@ -1,2 +1,1 @@
-# 5x5-tictactoe
-## Coming Soon
+# Advanced TicTacToe game
