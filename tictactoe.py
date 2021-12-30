@@ -7,7 +7,6 @@ class tictactoe:
     termcls = os.get_terminal_size().columns
     players = {}
 
-    
     def __init__(self, pl1=None, pl2=None, width=None):
         if ((pl1 == None) or (pl1 == "")):
             print("WARN: Player 1 didn't entered a name, \"Player1\" name setted by default")
@@ -29,18 +28,19 @@ class tictactoe:
             print("WARN: Board size not entered, \"5\" is setted by default.")
             self.width = 5
         else:
-            self.width = width
+            self.width = int(width)
 
         if int(self.width) <= 2:
             print("You can make at least 3x3 boards")
             exit()
-        elif int(self.width) >= 10:
-            print("You can make at most 10x10 boards")
+        elif int(self.width) >= 31:
+            print("You can make at most 30x30 boards")
             exit()
 
+        print("Processing...")
         time.sleep(3)
 
-        
+
     def genboard(self):
         line = ["___"] * self.width
 
@@ -54,18 +54,16 @@ class tictactoe:
         else:
             os.system("cls")
 
-        abc = [f"{i}  " for i in range(1, self.width+1)]
-        print("  ".join(abc).center(int(self.termcls)), "")
+        abc = [i for i in range(1, self.width+1)]
+        print(("{:^4} "*self.width).format(*abc).center(self.termcls+3))
 
         tmpbrd = []
         for a in self.brd:
             tmpbrd.append(a.copy())
 
         for b in range(1, len(tmpbrd)+1):
-            tmpbrd[b-1].insert(0, f"{b} ")
-
-        for c in tmpbrd:
-            print("  ".join(c).center(int(self.termcls-5)), "\n")
+            tmpbrd[b-1].insert(0, " {:^3}")
+            print("  ".join(tmpbrd[b-1]).format(b).center(int(self.termcls-5)), "\n")
     
 
     def playerselection(self):
@@ -97,6 +95,7 @@ class tictactoe:
             if ("".join(a).replace(" ", "").find(player*3)) != -1:
                 return True
 
+
         for b in range(0, len(self.brd)):
             chars = ""
             for c in range(0, len(self.brd)):
@@ -119,15 +118,35 @@ class tictactoe:
 
     def action(self):
         self.curpl = self.playerselection()
+        
         self.firstgame = 0
 
         while True:
             self.printboard()
+
             print(f"Order of {self.curpl}")
 
             try:
-                self.locationx = int(input("Enter the vertical position: "))
-                self.locationy = int(input("Enter the horizontal position: "))
+                while True:
+                    self.locationx = int(input("Enter the vertical position: "))
+                    if self.locationx < 1:
+                        print("Please enter a positive number.")
+                        time.sleep(2)
+                        self.printboard()
+                        print(f"Order of {self.curpl}")
+                    else:
+                        break
+
+                while True:
+                    self.locationy = int(input("Enter the horizontal position: "))
+                    if self.locationy < 1:
+                        print("Please enter a positive number.")
+                        time.sleep(2)
+                        self.printboard()
+                        print(f"Order of {self.curpl}")
+                    else:
+                        break
+
             except ValueError:
                 print("Please type a number.")
                 time.sleep(2)
@@ -153,8 +172,7 @@ class tictactoe:
 
 pl1 = input("Player1 name:\n> ")
 pl2 = input("Player2 name:\n> ")
-width = input("Board size (min 3, max 9)\n> ")
-
+width = input("Board size (min 3, max 30)\n> ")
 
 gamesession1 = tictactoe(pl1, pl2, width)
 gamesession1.run()
