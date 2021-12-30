@@ -7,6 +7,7 @@ class tictactoe:
     termcls = os.get_terminal_size().columns
     players = {}
 
+    
     def __init__(self, pl1=None, pl2=None, width=None):
         if ((pl1 == None) or (pl1 == "")):
             print("WARN: Player 1 didn't entered a name, \"Player1\" name setted by default")
@@ -39,6 +40,7 @@ class tictactoe:
 
         time.sleep(3)
 
+        
     def genboard(self):
         line = ["___"] * self.width
 
@@ -66,8 +68,6 @@ class tictactoe:
             print("  ".join(c).center(int(self.termcls-5)), "\n")
     
 
-
-
     def playerselection(self):
         if self.firstgame == 1:
             self.lastplayer = random.randint(0, 1)
@@ -78,7 +78,6 @@ class tictactoe:
         elif self.lastplayer == 1:
             self.lastplayer = 0
             return self.pl2
-
 
 
     def applymove(self, curpl):
@@ -97,7 +96,6 @@ class tictactoe:
         for a in self.brd:
             if ("".join(a).replace(" ", "").find(player*3)) != -1:
                 return True
-
 
         for b in range(0, len(self.brd)):
             chars = ""
@@ -119,15 +117,12 @@ class tictactoe:
                     return True
 
 
-
     def action(self):
         self.curpl = self.playerselection()
-        
         self.firstgame = 0
 
         while True:
             self.printboard()
-
             print(f"Order of {self.curpl}")
 
             try:
@@ -151,7 +146,6 @@ class tictactoe:
                     time.sleep(2)
 
 
-
     def run(self):
         self.genboard()
         self.action()
@@ -160,6 +154,7 @@ class tictactoe:
 pl1 = input("Player1 name:\n> ")
 pl2 = input("Player2 name:\n> ")
 width = input("Board size (min 3, max 9)\n> ")
+
 
 gamesession1 = tictactoe(pl1, pl2, width)
 gamesession1.run()
