@@ -1,1 +1,1 @@
-# Advanced TicTacToe game
+# Some Python Projects
