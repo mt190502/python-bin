@@ -31,8 +31,7 @@ class hangman:
             
         print(f"LANG: {self.sellang}  |  Health: {self.health}", "\n")
         print(*self.board)
-        print(self.word)
-
+        
 
     def checkletter(self, req, reqword):
         counter = -1
