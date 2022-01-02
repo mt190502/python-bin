@@ -59,8 +59,8 @@ class hangman:
             self.printboard()
 
             usrletter = str(input("Please enter a letter: ")).strip()
-
-            if len(usrletter) >= 2:
+            
+            if (len(usrletter) != 1) or (usrletter.isspace() == True):
                 print("Just enter a letter!!!")
                 time.sleep(2)
             else:
