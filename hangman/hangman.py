@@ -2,7 +2,8 @@ import os, random, time
 
 class hangman:
     board = []
-    health = 5
+    health = 10
+    tried = set()
 
     def __init__(self, **kwargs):
         self.sellang = kwargs.get("lang")
@@ -29,11 +30,19 @@ class hangman:
         else:
             os.system("cls")
             
-        print(f"LANG: {self.sellang}  |  Health: {self.health}", "\n")
+        print(
+            f"LANG: {self.sellang}  | ",
+            f"Health: {self.health}  | ",
+            f"""Tried letters: {str(sorted(self.tried))[2:-2].replace("', '", ", ")}""",
+            "\n"
+        )
+
+        
         print(*self.board)
         print("")
 
     def checkletter(self, req, reqword):
+        self.tried.add(req)
         counter = -1
         result = ()
         for a in reqword:
@@ -53,26 +62,31 @@ class hangman:
                 print("Just enter a letter!!!")
                 time.sleep(2)
             else:
-                checklocs = self.checkletter(usrletter, self.word)
-
-                if checklocs == ():
-                    print("This letter was not found in the word!!!")
-                    self.health -= 1
-                    
-                    if self.health <= 0:
-                        print("Game over, you lost!!!")
-                        exit()
-
+                if usrletter in self.tried:
+                    print("This letter has been used before!!!")
                     time.sleep(2)
-                    
                 else:
-                    for b in checklocs:
-                        self.board[b] = f" {usrletter} "
+                    checklocs = self.checkletter(usrletter, self.word)
 
-                    if self.board.count("___") <= 0:
-                        self.printboard()
-                        print("You win's")
-                        exit()
+                    if checklocs == ():
+                        print("This letter was not found in the word!!!")
+                        self.health -= 1
+                    
+                        if self.health <= 0:
+                            print("Game over, you lost!!!")
+                            print(f"Word is : {self.word}")
+                            exit()
+
+                        time.sleep(2)
+
+                    else:
+                        for b in checklocs:
+                            self.board[b] = f" {usrletter} "
+
+                        if self.board.count("___") <= 0:
+                            self.printboard()
+                            print("You win's")
+                            exit()
                 
                 
     def run(self):
