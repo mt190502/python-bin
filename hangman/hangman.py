@@ -4,6 +4,7 @@ class hangman:
     board = []
     health = 10
     score = 100
+    bonus = 0
     tried = set()
 
     def __init__(self, **kwargs):
@@ -59,7 +60,7 @@ class hangman:
             self.printboard()
 
             usrletter = str(input("Please enter a letter: ")).strip()
-            
+
             if len(usrletter) != 1:
                 print("Just enter a letter!!!")
                 time.sleep(2)
@@ -86,6 +87,12 @@ class hangman:
                         for b in checklocs:
                             self.board[b] = f" {usrletter} "
                             self.score += 20
+                            self.bonus += 20
+                            if self.bonus >= 100:
+                                print("BONUS: I gave 1 life for gaining 100 points")
+                                self.bonus = 0
+                                self.health += 1
+                                time.sleep(2)
 
                         if self.board.count("___") <= 0:
                             self.printboard()
