@@ -3,6 +3,7 @@ import os, random, time
 class hangman:
     board = []
     health = 10
+    score = 100
     tried = set()
 
     def __init__(self, **kwargs):
@@ -13,7 +14,7 @@ class hangman:
                 g = f.readlines()
                 self.word = g[random.randint(0, len(g))]
         else:
-            self.word = kwargs.get("word")
+            self.word = kwargs.get("customword").lower()
 
 
     def genboard(self):
@@ -33,6 +34,7 @@ class hangman:
         print(
             f"LANG: {self.sellang}  | ",
             f"Health: {self.health}  | ",
+            f"Score: {self.score}  | ",
             f"""Tried letters: {str(sorted(self.tried))[2:-2].replace("', '", ", ")}""",
             "\n"
         )
@@ -71,6 +73,7 @@ class hangman:
                     if checklocs == ():
                         print("This letter was not found in the word!!!")
                         self.health -= 1
+                        self.score -= 10
                     
                         if self.health <= 0:
                             print("Game over, you lost!!!")
@@ -82,6 +85,7 @@ class hangman:
                     else:
                         for b in checklocs:
                             self.board[b] = f" {usrletter} "
+                            self.score += 20
 
                         if self.board.count("___") <= 0:
                             self.printboard()
