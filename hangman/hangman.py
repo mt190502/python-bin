@@ -2,14 +2,24 @@ import os, random, time
 
 class hangman:
     board = []
-    health = 10
+    health = 7
     score = 100
     bonus = 0
-    tried = set()
+    triedletters = set()
+
+    man = [["     ----|\n", "        |\n", "        |\n", "        |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "        |\n", "        |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "        |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "    |   |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "    |\  |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "   /|\  |\n", "        |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "   /|\  |\n", "     \  |\n", "        |\n", "    ---------\n"],
+           ["     ----|\n", "    |   |\n", "    O   |\n", "   /|\  |\n", "   / \  |\n", "        |\n", "    ---------\n"]]
+
 
     def __init__(self, **kwargs):
-        self.sellang = kwargs.get("lang")
-        wordlistfile = f"WORDS-{self.sellang}.txt"
+        self.selectedlang = kwargs.get("lang")
+        wordlistfile = f"WORDS-{self.selectedlang}.txt"
         if ( (kwargs.get("customword") == None) or (kwargs.get("customword") == "") ):
             with open(wordlistfile, "r+") as f:
                 g = f.readlines()
@@ -32,20 +42,27 @@ class hangman:
         else:
             os.system("cls")
             
+        self.man.sort(reverse=True)
+        
         print(
-            f"LANG: {self.sellang}  | ",
+            f"LANG: {self.selectedlang}  | ",
             f"Health: {self.health}  | ",
             f"Score: {self.score}  | ",
-            f"""Tried letters: {str(sorted(self.tried))[2:-2].replace("', '", ", ")}""",
+            f"""Tried letters: {str(sorted(self.triedletters))[2:-2].replace("', '", ", ")}""",
             "\n"
         )
 
         
-        print(*self.board)
+        print(*self.board, "\n"*2)
+        if self.health > 7:
+            print(*self.man[7])
+        else:
+            print(*self.man[self.health])
+
         print("")
 
     def checkletter(self, req, reqword):
-        self.tried.add(req)
+        self.triedletters.add(req)
         counter = -1
         result = ()
         for a in reqword:
@@ -61,30 +78,31 @@ class hangman:
 
             usrletter = str(input("Please enter a letter: ")).strip()
 
-            if len(usrletter) != 1:
+            if len(usrletter) != 1 or usrletter.isalpha() == False:
                 print("Just enter a letter!!!")
-                time.sleep(2)
+                time.sleep(1)
             else:
-                if usrletter in self.tried:
+                if usrletter in self.triedletters:
                     print("This letter has been used before!!!")
-                    time.sleep(2)
+                    time.sleep(1)
                 else:
-                    checklocs = self.checkletter(usrletter, self.word)
+                    checkpositions = self.checkletter(usrletter, self.word)
 
-                    if checklocs == ():
+                    if checkpositions == ():
                         print("This letter was not found in the word!!!")
                         self.health -= 1
                         self.score -= 10
                     
                         if self.health <= 0:
+                            self.printboard()
                             print("Game over, you lost!!!")
-                            print(f"Word is : {self.word}")
+                            print(f"Word is : {self.word} \n")
                             exit()
 
-                        time.sleep(2)
+                        time.sleep(1)
 
                     else:
-                        for b in checklocs:
+                        for b in checkpositions:
                             self.board[b] = f" {usrletter} "
                             self.score += 20
                             self.bonus += 20
@@ -92,11 +110,11 @@ class hangman:
                                 print("BONUS: I gave 1 life for gaining 100 points")
                                 self.bonus = 0
                                 self.health += 1
-                                time.sleep(2)
+                                time.sleep(1)
 
                         if self.board.count("___") <= 0:
                             self.printboard()
-                            print("You win's")
+                            print("You win's \n")
                             exit()
                 
                 
