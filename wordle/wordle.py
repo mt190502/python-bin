@@ -87,7 +87,7 @@ class wordle:
 
             if len(self.truechars) == 5 and set(self.truechars.values()) == {True}:
                 self.printboard()
-                print("Game over, you win's !!!")
+                print("Game over, you win !!!")
                 exit()
             self.printboard()
 
