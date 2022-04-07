@@ -9,11 +9,8 @@ class dice:
              ("---------", "| O   O |", "| O   O |", "| O   O |", "---------")]
 
 
-    def __init__(self, numondice=None):
-        if ((numondice == None) or (numondice == "")):
-            self.numondice = 1
-        else:
-            self.numondice = numondice
+    def __init__(self, numondice=1):
+        self.numondice = numondice
 
 
     def roll(self):
@@ -27,5 +24,5 @@ class dice:
             print()
 
 
-d = dice(3)
+d = dice(numondice=3)
 d.roll()
