@@ -1,0 +1,2 @@
+include wordle/*.txt
+include hangman/*.txt
