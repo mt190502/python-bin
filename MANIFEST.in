@@ -1,2 +1,1 @@
-include wordle/*.txt
-include hangman/*.txt
+include src/*.txt
