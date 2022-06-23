@@ -76,7 +76,7 @@ class rssWebHook:
         if feedtype == "RSS":
             data = {"username" : feedname, "content" : "{}{}{}".format(*rsscontent)}
         else:
-            data = {"username" : "{} ({})".format(ytBotTitle, feedname), "content" : "{}{}{}".format(*rsscontent)}
+            data = {"username" : "{} ({})".format(self.ytBotTitle, feedname), "content" : "{}{}{}".format(*rsscontent)}
 
         result = requests.post(dcWebhookUrl, json = data)
 
