@@ -44,7 +44,8 @@ class rssWebHook:
                     logFileOnlyAlnum = "".join([c for c in f.read() if c.isalnum()])
                     if logFileOnlyAlnum.find(postLinkOnlyAlnum) == -1:
                         self.sendpost(feedname, posttitle, postlink, self.dcWebhookUrl, feedtype)
-                        self.refreshlogs(feedtype, feedname, feedlink, "w")
+                        if a == self.numberOfPostsToCheck:
+                            self.refreshlogs(feedtype, feedname, feedlink, "w")
                     else:
                         print(f"{feedname.ljust(self.termcls)} : Bu feed adresi yeni bir içerik paylaşmadı.")
 
