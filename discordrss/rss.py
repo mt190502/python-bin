@@ -25,7 +25,7 @@ class rssWebHook:
                     posttitle = feedparser.parse(feedlink)['entries'][a]['title']
                     postlink = feedparser.parse(feedlink)['entries'][a]['link']
                 except IndexError:
-                    print(feed_name.ljust(self.termcls), ":", "Bu feed adresine ulaşılamıyor veya hatalı feed biçimi.")
+                    print(feedname.ljust(self.termcls), ":", "Bu feed adresine ulaşılamıyor veya hatalı feed biçimi.")
                 else:
                     f.writelines(f"{postlink}\n")
             f.close()
