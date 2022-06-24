@@ -21,9 +21,13 @@ class rssWebHook:
         logfile = "".join([a for a in feedname if a.isalnum()])
         with open(f"logs/{feedtype}/{logfile}", mode) as f:
             for a in range(self.numberOfPostsToCheck):
-                posttitle = feedparser.parse(feedlink)['entries'][a]['title']
-                postlink = feedparser.parse(feedlink)['entries'][a]['link']
-                f.writelines(f"{postlink}\n")
+                try:
+                    posttitle = feedparser.parse(feedlink)['entries'][a]['title']
+                    postlink = feedparser.parse(feedlink)['entries'][a]['link']
+                except IndexError:
+                    print(feed_name.ljust(self.termcls), ":", "Bu feed adresine ulaşılamıyor veya hatalı feed biçimi.")
+                else:
+                    f.writelines(f"{postlink}\n")
             f.close()
 
 
@@ -35,19 +39,23 @@ class rssWebHook:
             self.sendpost(feedname, feedparser.parse(feedlink)['entries'][0]['title'], feedparser.parse(feedlink)['entries'][0]['link'], self.dcWebhookUrl, feedtype)
         else:
             for a in range(self.numberOfPostsToCheck):
-                posttitle = feedparser.parse(feedlink)['entries'][a]['title']
-                postlink = feedparser.parse(feedlink)['entries'][a]['link']
+                try:
+                    posttitle = feedparser.parse(feedlink)['entries'][a]['title']
+                    postlink = feedparser.parse(feedlink)['entries'][a]['link']
+                except IndexError:
+                    print(feedname.ljust(self.termcls), ":", "Bu feed adresine ulaşılamıyor veya hatalı feed biçimi.")
+                else:
+                    postLinkOnlyAlnum = "".join([b for b in postlink if b.isalnum()])
 
-                postLinkOnlyAlnum = "".join([b for b in postlink if b.isalnum()])
+                    with open(f"logs/{feedtype}/{logfile}", "r+") as f:
+                        logFileOnlyAlnum = "".join([c for c in f.read() if c.isalnum()])
+                        if logFileOnlyAlnum.find(postLinkOnlyAlnum) == -1:
+                            self.sendpost(feedname, posttitle, postlink, self.dcWebhookUrl, feedtype)
+                        else:
+                            print(f"{feedname.ljust(self.termcls)} : Bu feed adresi yeni bir içerik paylaşmadı.")
 
-                with open(f"logs/{feedtype}/{logfile}", "r+") as f:
-                    logFileOnlyAlnum = "".join([c for c in f.read() if c.isalnum()])
-                    if logFileOnlyAlnum.find(postLinkOnlyAlnum) == -1:
-                        self.sendpost(feedname, posttitle, postlink, self.dcWebhookUrl, feedtype)
-                        if a == self.numberOfPostsToCheck:
-                            self.refreshlogs(feedtype, feedname, feedlink, "w")
-                    else:
-                        print(f"{feedname.ljust(self.termcls)} : Bu feed adresi yeni bir içerik paylaşmadı.")
+                    if a + 1 == self.numberOfPostsToCheck:
+                        self.refreshlogs(feedtype, feedname, feedlink, "w")
 
 
 
