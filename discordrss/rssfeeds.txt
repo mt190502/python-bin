@@ -1,0 +1,3 @@
+RSS -- Discover Blog -- https://mtaha.dev/index.xml
+YT -- Discover Youtube -- https://www.youtube.com/feeds/videos.xml?channel_id=UCcG6ItoWP_zEPz5O-yxvG7g
+DDD -- A disabled Feed -- https://example.com/feed

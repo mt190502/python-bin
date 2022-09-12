@@ -1,0 +1,6 @@
+feedparser
+requests
+requests-file
+requests-ftp
+requests-gssapi
+schedule
