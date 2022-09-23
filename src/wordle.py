@@ -1,5 +1,7 @@
 import os, random, time
 
+from . import _dir
+
 class wordle:
     def __init__(self):
         self.board = []
@@ -12,7 +14,7 @@ class wordle:
         self.moves = 0
         self.truechars = dict()
 
-        with open("WORDS5CHAR.txt", "r+") as f:
+        with open(os.path.join(_dir._datadir, "WORDS5CHAR.txt"), "r+") as f:
             self.allwords = f.readlines()
             self.word = self.allwords[random.randint(0, len(self.allwords))].strip("\n")
 
@@ -76,9 +78,9 @@ class wordle:
                     print("Please write a 5 letter word")
                 else:
                     break
-            
+
             self.apply(usrinput)
-            
+
             if (self.board[6] != ["___", "___", "___", "___", "___"]) and (len(self.truechars) != 5):
                 self.printboard()
                 print("Game over, you lost !!!")
