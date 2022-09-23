@@ -1,6 +1,8 @@
 import os, random, time
 
-class hangman:
+from . import _dir
+
+class Hangman:
     board = []
     health = 7
     score = 100
@@ -19,7 +21,7 @@ class hangman:
 
     def __init__(self, **kwargs):
         self.selectedlang = kwargs.get("lang")
-        wordlistfile = f"WORDS-{self.selectedlang}.txt"
+        wordlistfile = os.path.join(_dir._datadir, f"WORDS-{self.selectedlang}.txt")
         if ( (kwargs.get("customword") == None) or (kwargs.get("customword") == "") ):
             with open(wordlistfile, "r+") as f:
                 g = f.readlines()
@@ -41,9 +43,9 @@ class hangman:
             os.system("clear")
         else:
             os.system("cls")
-            
+
         self.man.sort(reverse=True)
-        
+
         print(
             f"LANG: {self.selectedlang}  | ",
             f"Health: {self.health}  | ",
@@ -52,7 +54,7 @@ class hangman:
             "\n"
         )
 
-        
+
         print(*self.board, "\n"*2)
         if self.health > 7:
             print(*self.man[7])
@@ -92,7 +94,7 @@ class hangman:
                         print("This letter was not found in the word!!!")
                         self.health -= 1
                         self.score -= 10
-                    
+
                         if self.health <= 0:
                             self.printboard()
                             print("Game over, you lost!!!")
@@ -116,11 +118,12 @@ class hangman:
                             self.printboard()
                             print("You win's \n")
                             exit()
-                
-                
+
+
     def run(self):
         self.genboard()
         self.main()
 
-a = hangman(customword=None, lang="tr")
-a.run()
+if __name__=='__main__':
+    hangman = Hangman(customword=None, lang="tr")
+    hangman.run()
